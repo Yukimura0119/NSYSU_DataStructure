@@ -1,17 +1,18 @@
-#include <iostream>
 #include <string.h>
+
+#include <iostream>
+
 using namespace std;
-//Author:蔡明軒 B093040044
-//Date:Sep.17.2020
-//stack & knight move
+// Author:蔡明軒 B093040044
+// Date:Sep.17.2020
+// stack & knight move
 template <class Type>
-class stack
-{
-    Type *arr;
+class stack {
+    Type* arr;
     int top;
     int capacity;
 
-public:
+   public:
     //建構子
     stack(int size = 50);
 
@@ -34,82 +35,66 @@ public:
     Type access(int);
 
     //解構子
-    ~stack()
-    {
-        delete[] arr;
-    }
+    ~stack() { delete[] arr; }
 };
 
 template <class Type>
-stack<Type>::stack(int size)
-{
+stack<Type>::stack(int size) {
     arr = new Type[size];
     capacity = size;
     top = -1;
 }
 
 template <class Type>
-void stack<Type>::push(Type x)
-{
+void stack<Type>::push(Type x) {
     arr[++top] = x;
 }
 
 template <class Type>
-Type stack<Type>::pop()
-{
+Type stack<Type>::pop() {
     return arr[top--];
 }
 
 template <class Type>
-bool stack<Type>::empty()
-{
-    if (top == -1)
-    {
+bool stack<Type>::empty() {
+    if (top == -1) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
 template <class Type>
-Type stack<Type>::back()
-{
+Type stack<Type>::back() {
     return arr[top];
 }
 
 template <class Type>
-int stack<Type>::size()
-{
+int stack<Type>::size() {
     return top + 1;
 }
 
 template <class Type>
-Type stack<Type>::access(int index)
-{
+Type stack<Type>::access(int index) {
     return arr[index];
 }
 
-struct data
-{
+struct data {
     int x;
     int y;
     int direction;
 };
 //判斷是否越界
-bool IsOut(int x, int y, int lmt)
-{
+bool IsOut(int x, int y, int lmt) {
     return (x < 1 || y < 1 || x > lmt || y > lmt);
 }
 
 int arr[10][10];
-int jump[8][2] = {{-2, 1}, {-1, 2}, {1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}};
+int jump[8][2] = {{-2, 1}, {-1, 2}, {1, 2},   {2, 1},
+                  {2, -1}, {1, -2}, {-1, -2}, {-2, -1}};
 
-int main()
-{
-    for (int i = 1; i <= 6; i++)
-    {
+int main() {
+    for (int i = 1; i <= 6; i++) {
         stack<data> st(36);
         //重設arr
         memset(arr, 0, sizeof(arr));
@@ -125,22 +110,17 @@ int main()
         temp.direction = -1;
         st.push(temp);
 
-        while (1)
-        {
+        while (1) {
             //若stack為空 表示無解
-            if (st.empty())
-            {
+            if (st.empty()) {
                 cout << "no solution" << endl;
                 break;
             }
 
             //若stack高度=總元素和 表示有結果
-            if (st.size() == i * i)
-            {
-                for (int j = 1; j <= i; j++)
-                {
-                    for (int k = 1; k <= i; k++)
-                    {
+            if (st.size() == i * i) {
+                for (int j = 1; j <= i; j++) {
+                    for (int k = 1; k <= i; k++) {
                         cout << arr[j][k] << " ";
                     }
                     cout << endl;
@@ -151,17 +131,14 @@ int main()
             //確認是否有路可走
             bool flag = 1;
 
-            for (int j = 0; j < 8; j++)
-            {
+            for (int j = 0; j < 8; j++) {
                 //跳過先前走過的
-                if (st.back().direction >= j)
-                {
+                if (st.back().direction >= j) {
                     continue;
                 }
 
                 int tempX = nowX + jump[j][0], tempY = nowY + jump[j][1];
-                if (!IsOut(tempX, tempY, i) && arr[tempX][tempY] == 0)
-                {
+                if (!IsOut(tempX, tempY, i) && arr[tempX][tempY] == 0) {
                     //將stack的top填上方向
                     flag = 0;
                     st.pop();
@@ -185,8 +162,7 @@ int main()
             }
 
             //若無路可走 跳回上一點
-            if (flag)
-            {
+            if (flag) {
                 st.pop();
                 arr[nowX][nowY] = 0;
                 nowX = st.back().x;
